@@ -1,0 +1,75 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "AzMigrateProjectName": {
+            "type": "String"
+        },
+        "Location": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "ServerMigrationSolutionName": "[concat(parameters('AzMigrateProjectName'), '/Servers-Migration-ServerMigration')]",
+        "ServerAssessmentSolutionName": "[concat(parameters('AzMigrateProjectName'), '/Servers-Assessment-ServerAssessment')]",
+        "ServerDiscoverySolutionName": "[concat(parameters('AzMigrateProjectName'), '/Servers-Discovery-ServerDiscovery')]"
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Migrate/MigrateProjects",
+            "apiVersion": "2018-09-01-preview",
+            "name": "[parameters('AzMigrateProjectName')]",
+            "location": "[parameters('Location')]",
+            "properties": {
+                "registeredTools": []
+            },
+            "resources": [
+                {
+                    "type": "Microsoft.Migrate/MigrateProjects/Solutions",
+                    "apiVersion": "2020-05-01",
+                    "name": "[variables('ServerAssessmentSolutionName')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Migrate/MigrateProjects/', parameters('AzMigrateProjectName'))]"
+                    ],
+                    "properties": {
+                        "tool": "ServerAssessment",
+                        "purpose": "Assessment",
+                        "goal": "Servers",
+                        "status": "Active"
+                    }
+                },
+                {
+                    "type": "Microsoft.Migrate/MigrateProjects/Solutions",
+                    "apiVersion": "2020-05-01",
+                    "name": "[variables('ServerDiscoverySolutionName')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Migrate/MigrateProjects/', parameters('AzMigrateProjectName'))]"
+                    ],
+                    "properties": {
+                        "tool": "ServerDiscovery",
+                        "purpose": "Discovery",
+                        "goal": "Servers",
+                        "status": "Inactive"
+
+                    }
+                },
+                {
+                    "type": "Microsoft.Migrate/MigrateProjects/Solutions",
+                    "apiVersion": "2020-05-01",
+                    "name": "[variables('ServerMigrationSolutionName')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Migrate/MigrateProjects/', parameters('AzMigrateProjectName'))]"
+                    ],
+                    "properties": {
+                        "tool": "ServerMigration",
+                        "purpose": "Migration",
+                        "goal": "Servers",
+                        "status": "Active"
+
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "AzMigrateProjectName": {
+            "value": ""
+        },
+        "Location": {
+            "value": ""
+        },
+        "MigrateProjects_ResourceID": {
+            "value": ""
+        },
+        "assessmentprojects_MigrateProjects_ResourceID": {
+            "value": "" 
+        },
+        "MasterSites_MigrateProjects_ResourceID": {
+            "value": "" 
+        },
+        "Keyvault_ResourceID": {
+            "value": "" 
+        },
+        "Recoveryvaults_ResourceID": {
+            "value": "" 
+        },
+        "KeyVaultName": {
+            "value": ""
+        },
+        "SQLSiteName": {
+            "value": "" 
+        },
+        "AzMigrateApplianceName":{
+            "value": ""
+        },
+        "RecoveryVaultName": {
+            "value": ""
+        },
+        "VMWareSite_MigrateProjects_ResourceID":{
+            "value": ""
+        }
+    }
+}

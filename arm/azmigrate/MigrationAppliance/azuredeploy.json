@@ -1,0 +1,189 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Azure Migrate Resource Location"
+            }
+        },
+        "AzMigrateProjectName": {
+            "type": "string",
+            "metadata": {
+                "description": "Azure Migrate Project Name"
+            }
+        },
+        "TenantID": {
+            "type": "string",
+            "metadata": {
+                "description": "Azure AD Tenant ID"
+            }
+        },
+        "AzMigrateProjectResourceID": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource ID of the Azure Migration Project"
+            }
+        },
+        "AzMigrateProjectApplianceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Azure Migrate Appliance Name"
+            }
+        },
+        "AccessPolicyObjectID": {
+            "type": "string",
+            "metadata": {
+                "description": "Specify the access policy object ID"
+            }
+        }
+    },
+    "variables": {
+        "keyvaultname": "[concat(parameters('AzMigrateProjectName'),'-kv')]",
+        "keyvaulturi": "[concat('https://',variables('keyvaultname'),'.vault.azure.net')]",
+        "sqlsitename":"[concat(parameters('AzMigrateProjectApplianceName'),'-mastersite/',parameters('AzMigrateProjectName'),'-sqlsites')]" //az-weu-mig-061420mastersite/az-weu-mig-061420sqlsites
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2016-10-01",
+            "name": "[variables('keyvaultname')]",
+            "location": "westeurope",
+            "dependsOn": [],
+            "tags": {
+                "Migrate Project": "[parameters('AzMigrateProjectName')]"
+            },
+            "kind": "KeyVault",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[parameters('TenantID')]",
+                "enabledForDeployment": true,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": true,
+                "accessPolicies": [
+                    {
+                        "tenantId": "[parameters('TenantID')]",
+                        "objectId": "[parameters('AccessPolicyObjectID')]",
+                        "permissions": {
+                            "keys": [
+                                "all"
+                            ],
+                            "secrets": [
+                                "all"
+                            ],
+                            "certificates": [
+                                "all"
+                            ],
+                            "storage": [
+                                "all"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.OffAzure/VMwareSites",
+            "apiVersion": "2020-01-01-preview",
+            "name": "[concat(parameters('AzMigrateProjectApplianceName'),'-site')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                //"/subscriptions/f0dcfd42-4c20-490a-bb3b-c6a2391c99f3/resourceGroups/hub-weu-mig-rg/providers/Microsoft.KeyVault/vaults/az-weu-mig-061420kv"
+                "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname'))]"
+            ],
+            "tags": {
+                "Migrate Project": "[parameters('AzMigrateProjectName')]"
+            },
+            "kind": "Migrate",
+            "properties": {
+                "agentDetails": {
+                    "keyVaultId": "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname'))]",
+                    "keyVaultUri": "[variables('keyvaulturi')]"
+                },
+                "applianceName": "[parameters('AzMigrateProjectApplianceName')]",
+                "discoverySolutionId": "[concat(parameters('AzMigrateProjectResourceID'),'/Servers-Discovery-ServerDiscovery')]"
+            }
+        },
+        {
+            "type": "Microsoft.Migrate/assessmentprojects",
+            "apiVersion": "2019-05-01",
+            "name": "[concat(parameters('AzMigrateProjectApplianceName'),'-project')]",
+            "location": "westeurope",
+            "dependsOn": [],
+            "tags": {
+                "Migrate Project": "[parameters('AzMigrateProjectName')]"
+            },
+            "kind": "Migrate",
+            "properties": {
+                "projectStatus": "Active",
+                "assessmentSolutionId": "[concat(parameters('AzMigrateProjectResourceID'),'/Solutions/Servers-Assessment-ServerAssessment')]"
+            }
+        },
+        {
+            "type": "Microsoft.OffAzure/MasterSites",
+            "apiVersion": "2020-07-07",
+            "name": "[concat(parameters('AzMigrateProjectApplianceName'),'-mastersite')]",
+            "location": "westeurope",
+            "dependsOn": [
+                //"/subscriptions/f0dcfd42-4c20-490a-bb3b-c6a2391c99f3/resourceGroups/hub-weu-mig-rg/providers/Microsoft.OffAzure/VMwareSites/AzMigApp016999site"
+                "[resourceId('Microsoft.OffAzure/VMwareSites', concat(parameters('AzMigrateProjectApplianceName'),'-site'))]"
+            ],
+            "tags": {
+                "Migrate Project": "[parameters('AzMigrateProjectName')]"
+            },
+            "kind": "Migrate",
+            "properties": {
+                "sites": [
+                    //"/subscriptions/f0dcfd42-4c20-490a-bb3b-c6a2391c99f3/resourceGroups/hub-weu-mig-rg/providers/Microsoft.OffAzure/VMwareSites/AzMigApp016999site"
+                    "[resourceId('Microsoft.OffAzure/VMwareSites', concat(parameters('AzMigrateProjectApplianceName'),'-site'))]"
+                ],
+                "allowMultipleSites": true
+            }
+        },
+        {
+            "type": "Microsoft.OffAzure/MasterSites/SqlSites",
+            "apiVersion": "2020-11-11-preview",
+            "name": "[variables('sqlsitename')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                //"/subscriptions/f0dcfd42-4c20-490a-bb3b-c6a2391c99f3/resourceGroups/hub-weu-mig-rg/providers/Microsoft.OffAzure/MasterSites/az-weu-mig-061420mastersite"
+                 "[concat('Microsoft.OffAzure/MasterSites/', parameters('AzMigrateProjectApplianceName'),'-mastersite')]"
+            ],
+            "tags": {
+                "Migrate Project": "[parameters('AzMigrateProjectName')]"
+            },
+            "kind": "Migrate",
+            "properties": {
+                "discoverySolutionId": "[concat(parameters('AzMigrateProjectResourceID'),'/Solutions/Servers-Discovery-ServerDiscovery')]",
+                "siteAppliancePropertiesCollection": [
+                    {
+                        "agentDetails": {
+                            "keyVaultId": "[resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname'))]",
+                            "keyVaultUri": "[variables('keyvaulturi')]"
+                        },
+                        "applianceName": "[parameters('AzMigrateProjectApplianceName')]"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.RecoveryServices/vaults",
+            "apiVersion": "2018-07-10",
+            "name": "[concat(parameters('AzMigrateProjectApplianceName'),'-rsv')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "tags": {
+                "Migrate Project": "[parameters('AzMigrateProjectName')]"
+            },
+            "sku": {
+                "name": "RS0",
+                "tier": "Standard"
+            },
+            "properties": {}
+        }
+    ]
+}

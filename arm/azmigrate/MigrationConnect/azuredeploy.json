@@ -1,0 +1,133 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "AzMigrateProjectName": {
+            "type": "String"
+        },
+        "Location": {
+            "type": "string"
+        },
+        "MigrateProjects_ResourceID": {
+            "type": "String"
+        },
+        "assessmentprojects_MigrateProjects_ResourceID": {
+            "type": "String"
+        },
+        "MasterSites_MigrateProjects_ResourceID": {
+            "type": "String"
+        },
+        "VMWareSite_MigrateProjects_ResourceID": {
+            "type": "String"
+        },
+        "Keyvault_ResourceID": {
+            "type": "String"
+        },
+        "Recoveryvaults_ResourceID": {
+            "type": "String"
+        },
+        "RecoveryVaultName": {
+            "type": "string"
+        },
+        "KeyVaultName": {
+            "type": "string"
+
+        },
+        "SQLSiteName": {
+            "type": "string"
+        },
+        "AzMigrateApplianceName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "ServerMigrationSolutionName": "[concat(parameters('AzMigrateProjectName'), '/Servers-Migration-ServerMigration')]",
+        "ServerAssessmentSolutionName": "[concat(parameters('AzMigrateProjectName'), '/Servers-Assessment-ServerAssessment')]",
+        "ServerDiscoverySolutionName": "[concat(parameters('AzMigrateProjectName'), '/Servers-Discovery-ServerDiscovery')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Migrate/MigrateProjects",
+            "apiVersion": "2018-09-01-preview",
+            "name": "[parameters('AzMigrateProjectName')]",
+            "location": "[parameters('Location')]",
+            "properties": {
+                "registeredTools": [
+                    "ServerDiscovery",
+                    "ServerAssessment",
+                    "ServerMigration"
+                ]
+            },
+            "resources": [
+                {
+                    "type": "Microsoft.Migrate/MigrateProjects/Solutions",
+                    "apiVersion": "2018-09-01-preview",
+                    "name": "[variables('ServerAssessmentSolutionName')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Migrate/MigrateProjects/', parameters('AzMigrateProjectName'))]"
+                    ],
+                    "properties": {
+                        "tool": "ServerAssessment",
+                        "purpose": "Assessment",
+                        "goal": "Servers",
+                        "status": "Active",
+                        "details": {
+                            "groupCount": 0,
+                            "assessmentCount": 0,
+                            "extendedDetails": {
+                                "projectId": "[parameters('assessmentprojects_MigrateProjects_ResourceID')]"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "Microsoft.Migrate/MigrateProjects/Solutions",
+                    "apiVersion": "2018-09-01-preview",
+                    "name": "[variables('ServerDiscoverySolutionName')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Migrate/MigrateProjects/', parameters('AzMigrateProjectName'))]"
+                    ],
+                    "properties": {
+                        "tool": "ServerDiscovery",
+                        "purpose": "Discovery",
+                        "goal": "Servers",
+                        "status": "Inactive",
+                        "details": {
+                            "groupCount": 0,
+                            "assessmentCount": 0,
+                            "extendedDetails": {
+                                "masterSiteId": "[parameters('MasterSites_MigrateProjects_ResourceID')]",
+                                "supportedScenarioSites": "[concat('{\"SqlSites\":\"', parameters('MasterSites_MigrateProjects_ResourceID'), '/SqlSites/',parameters('SQLSiteName'),'\"}')]",
+                                "keyVaultId": "[parameters('Keyvault_ResourceID')]",
+                                "keyVaultUrl": "[concat('https://',parameters('KeyVaultName'),'.vault.azure.net')]",
+                                "applianceNameToSiteIdMapV3": "[concat('[{\"',parameters('AzMigrateApplianceName'),'\":{\"ApplianceName\":\"',parameters('AzMigrateApplianceName'),'\",\"SiteId\":\"',parameters('VMWareSite_MigrateProjects_ResourceID'),'\",\"AadAppDetails\":{\"TenantID\":\"\",\"AppName\":\"\",\"AppID\":\"\",\"ObjectID\":\"\"},\"KeyVaultId\":\"', parameters('Keyvault_ResourceID'), '\",\"KeyVaultUrl\":\"https://', parameters('KeyVaultName'), '.vault.azure.net\",\"CertificateContents\":{\"',parameters('RecoveryVaultName'),'agentauthcert\":\"\"}}}]')]"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "Microsoft.Migrate/MigrateProjects/Solutions",
+                    "apiVersion": "2018-09-01-preview",
+                    "name": "[variables('ServerMigrationSolutionName')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Migrate/MigrateProjects/', parameters('AzMigrateProjectName'))]"
+                    ],
+                    "properties": {
+                        "tool": "ServerMigration",
+                        "purpose": "Migration",
+                        "goal": "Servers",
+                        "status": "Active",
+                        "details": {
+                            "groupCount": 0,
+                            "assessmentCount": 0,
+                            "extendedDetails": {
+                                "vaultId": "[parameters('Recoveryvaults_ResourceID')]"
+                            }
+
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
