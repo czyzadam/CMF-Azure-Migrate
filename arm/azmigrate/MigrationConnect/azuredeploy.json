@@ -17,7 +17,7 @@
         "MasterSites_MigrateProjects_ResourceID": {
             "type": "String"
         },
-        "VMWareSite_MigrateProjects_ResourceID": {
+        "HyperVSite_MigrateProjects_ResourceID": {
             "type": "String"
         },
         "Keyvault_ResourceID": {
@@ -100,7 +100,7 @@
                                 "supportedScenarioSites": "[concat('{\"SqlSites\":\"', parameters('MasterSites_MigrateProjects_ResourceID'), '/SqlSites/',parameters('SQLSiteName'),'\"}')]",
                                 "keyVaultId": "[parameters('Keyvault_ResourceID')]",
                                 "keyVaultUrl": "[concat('https://',parameters('KeyVaultName'),'.vault.azure.net')]",
-                                "applianceNameToSiteIdMapV3": "[concat('[{\"',parameters('AzMigrateApplianceName'),'\":{\"ApplianceName\":\"',parameters('AzMigrateApplianceName'),'\",\"SiteId\":\"',parameters('VMWareSite_MigrateProjects_ResourceID'),'\",\"AadAppDetails\":{\"TenantID\":\"\",\"AppName\":\"\",\"AppID\":\"\",\"ObjectID\":\"\"},\"KeyVaultId\":\"', parameters('Keyvault_ResourceID'), '\",\"KeyVaultUrl\":\"https://', parameters('KeyVaultName'), '.vault.azure.net\",\"CertificateContents\":{\"',parameters('RecoveryVaultName'),'agentauthcert\":\"\"}}}]')]"
+                                "applianceNameToSiteIdMapV3": "[concat('[{\"',parameters('AzMigrateApplianceName'),'\":{\"ApplianceName\":\"',parameters('AzMigrateApplianceName'),'\",\"SiteId\":\"',parameters('HyperVSite_MigrateProjects_ResourceID'),'\",\"AadAppDetails\":{\"TenantID\":\"\",\"AppName\":\"\",\"AppID\":\"\",\"ObjectID\":\"\"},\"KeyVaultId\":\"', parameters('Keyvault_ResourceID'), '\",\"KeyVaultUrl\":\"https://', parameters('KeyVaultName'), '.vault.azure.net\",\"CertificateContents\":{\"',parameters('RecoveryVaultName'),'agentauthcert\":\"\"}}}]')]"
                             }
                         }
                     }

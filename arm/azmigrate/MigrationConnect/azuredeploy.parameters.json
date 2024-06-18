@@ -35,7 +35,7 @@
         "RecoveryVaultName": {
             "value": ""
         },
-        "VMWareSite_MigrateProjects_ResourceID":{
+        "HyperVSite_MigrateProjects_ResourceID":{
             "value": ""
         }
     }

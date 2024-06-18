@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "masterSites_Project20955mastersite_name": {
+            "value": null
+        },
+        "hypervsites_hyper0023site_externalid": {
+            "value": null
+        },
+        "vaults_Project20955kv_externalid": {
+            "value": null
+        }
+    }
+}
