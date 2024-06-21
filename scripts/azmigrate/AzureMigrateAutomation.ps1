@@ -1,12 +1,11 @@
 #######################################################################################################################################
 #get-AzContext -ListAvailable | Remove-AzContext
 #connect-AzAccount
-
 #region variables
 
 $location = "francecentral"
-$resourcegroupname = "CMF-MigrationDemo02"
-$migrationprojectname = "CMF-MigrationDemo02"
+$resourcegroupname = "CMF-MigrationDemo08"
+$migrationprojectname = "CMF-MigrationDemo08"
 
 #CMF
 #$subscriptionid = "9d09cff7-2d88-4196-a17c-a0881d1b4f64" #cmf-azure-dev
@@ -40,9 +39,10 @@ $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armpa
 #$SetTenant = Set-AzContext -Tenant $tenantid
 #$SetSubscription = Set-AzContext -Subscription $subscriptionid
 
-#New-AzResourceGroup  -Name $resourcegroupname -Location $location
+New-AzResourceGroup  -Name $resourcegroupname -Location $location
 
-$Deploy_AzureMigrateMigration = New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
+#$Deploy_AzureMigrateMigration = 
+New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
 
 #######################################################################################################################################
 #Step 2 : ARM Deployment => Migration Appliance
@@ -63,7 +63,8 @@ $armparamobject.parameters.AccessPolicyObjectID.value = $Objectid
 $parameterobject = @{ }
 $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armparamobject.parameters[$_]['value'] }
 
-$Deploy_AzureMigrate = New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)-appliance" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
+#$Deploy_AzureMigrate = 
+New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)-appliance" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
 
 
 #######################################################################################################################################
@@ -98,6 +99,7 @@ $armparamobject.parameters.Recoveryvaults_ResourceID.value = $RsvResourceID.Reso
 $parameterobject = @{ }
 $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armparamobject.parameters[$_]['value'] }
  
-$Deploy_AzureMigrate = New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)-applianceconnect" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
+#$Deploy_AzureMigrate = 
+New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)-applianceconnect" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
  
 Write-Host $objectid 

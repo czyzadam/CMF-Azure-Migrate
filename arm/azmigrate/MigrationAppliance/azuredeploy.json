@@ -47,7 +47,7 @@
     "resources": [
         {
             "type": "Microsoft.KeyVault/vaults",
-            "apiVersion": "2023-02-01",
+            "apiVersion": "2023-07-01",
             "name": "[variables('keyvaultname')]",
             "location": "[parameters('location')]",
             "dependsOn": [],
@@ -60,14 +60,14 @@
                     "family": "A",
                     "name": "standard"
                 },
-                "tenantId": "[parameters('TenantID')]",
+                 "tenantId": "[subscription().tenantId]",
                 "enabledForDeployment": true,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": true,
                 "publicNetworkAccess": "Enabled",
                 "accessPolicies": [
                     {
-                        "tenantId": "[parameters('TenantID')]",
+                         "tenantId": "[subscription().tenantId]",
                         "objectId": "[parameters('AccessPolicyObjectID')]",
                         "permissions": {
                             "keys": [
