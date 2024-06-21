@@ -1,19 +1,31 @@
+#######################################################################################################################################
+#get-AzContext -ListAvailable | Remove-AzContext
+#connect-AzAccount
+
 #region variables
 
-$location = "polandcentral"
-$resourcegroupname = "ARM-migration-lab"
-$migrationprojectname = "ARM-Lab"
+$location = "francecentral"
+$resourcegroupname = "CMF-MigrationDemo02"
+$migrationprojectname = "CMF-MigrationDemo02"
+
+#CMF
+#$subscriptionid = "9d09cff7-2d88-4196-a17c-a0881d1b4f64" #cmf-azure-dev
+#$subscriptionid = "0cda6999-8d6c-4882-91a5-de0db2c74586" #cmf-azure-dev2
+#$tenantid = "b7dd1ca6-8890-4eec-b441-890719cd4915"
+
+#ATM
 $subscriptionid = "4bfade5e-64eb-4d29-ba2e-933a6612bd5c"
-$tenantid = "6a74e396-c946-4654-ab7e-5f120bdac760"
+$tenantid = "6a74e396-c946-4654-ab7eget-5f120bdac760"
 
 $AzureMigrateApplianceName = $migrationprojectname + "-app"
 $DeploymentName = "Deploy-" + $migrationprojectname
+
 # Object ID of the service principal you want to give access to Azure Keyvault
-$Objectid = "1477a0aa-6af3-48d9-8ec4-2716eca4f85b"
+#$Objectid = "330e881b-46cb-40b4-a713-8c6056e23e4e" # CMF
+$Objectid = "1477a0aa-6af3-48d9-8ec4-2716eca4f85b" # ATM
 
-#endregion
-
-#region Step 1 : ARM Deployment => Azure Migrate Project and Solutions
+#######################################################################################################################################
+#Step 1 : ARM Deployment => Azure Migrate Project and Solutions
 
 $armtemplate = Join-Path "." -ChildPath "arm" -AdditionalChildPath "azmigrate", "MigrationProject", "azuredeploy.json" | Get-Item
 $armtemplateparameter = Join-Path "." -ChildPath "arm" -AdditionalChildPath "azmigrate", "MigrationProject", "azuredeploy.parameters.json" | Get-Item
@@ -21,14 +33,19 @@ $armtemplateparameter = Join-Path "." -ChildPath "arm" -AdditionalChildPath "azm
 $armparamobject = Get-Content $armtemplateparameter.FullName | ConvertFrom-Json -AsHashtable
 $armparamobject.parameters.AzMigrateProjectName.value = $migrationprojectname
 $armparamobject.parameters.Location.value = $location
+
 $parameterobject = @{ }
 $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armparamobject.parameters[$_]['value'] }
 
-$Deploy_ResourceGroup = New-AzResourceGroup  -Name $resourcegroupname -Location $location
+#$SetTenant = Set-AzContext -Tenant $tenantid
+#$SetSubscription = Set-AzContext -Subscription $subscriptionid
+
+#New-AzResourceGroup  -Name $resourcegroupname -Location $location
 
 $Deploy_AzureMigrateMigration = New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
 
-#region Step 2 : ARM Deployment => Migration Appliance
+#######################################################################################################################################
+#Step 2 : ARM Deployment => Migration Appliance
 
 $ResourceID = Get-AzResource -Name $migrationprojectname
 
@@ -47,8 +64,10 @@ $parameterobject = @{ }
 $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armparamobject.parameters[$_]['value'] }
 
 $Deploy_AzureMigrate = New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)-appliance" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
-#endregion
-#region Step 3 : Connect Migration Appliance with Migration Project
+
+
+#######################################################################################################################################
+#Step 3 : Connect Migration Appliance with Migration Project
  
 $AssessmentProjectResourceID = Get-AzResource -Name "$($AzureMigrateApplianceName)-project"
 $RsvResourceID = Get-AzResource -Name "$($AzureMigrateApplianceName)-rsv"
@@ -81,4 +100,4 @@ $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armpa
  
 $Deploy_AzureMigrate = New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupname -Name "$($DeploymentName)-applianceconnect" -TemplateFile $armtemplate.FullName -TemplateParameterObject $parameterobject
  
-#endregion
+Write-Host $objectid 

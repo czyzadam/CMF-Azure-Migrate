@@ -1,0 +1,88 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_HypervLab_name": {
+            "defaultValue": "HypervLab",
+            "type": "String"
+        },
+        "disks_HypervLab_OsDisk_1_9d889cf1a0de46449a80c76187948f69_externalid": {
+            "defaultValue": "/subscriptions/4bfade5e-64eb-4d29-ba2e-933a6612bd5c/resourceGroups/CMF-Lab/providers/Microsoft.Compute/disks/HypervLab_OsDisk_1_9d889cf1a0de46449a80c76187948f69",
+            "type": "String"
+        },
+        "networkInterfaces_hypervlab203_externalid": {
+            "defaultValue": "/subscriptions/4bfade5e-64eb-4d29-ba2e-933a6612bd5c/resourceGroups/CMF-Lab/providers/Microsoft.Network/networkInterfaces/hypervlab203",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2024-03-01",
+            "name": "[parameters('virtualMachines_HypervLab_name')]",
+            "location": "polandcentral",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D8s_v3"
+                },
+                "additionalCapabilities": {
+                    "hibernationEnabled": false
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2022-datacenter-azure-edition",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_HypervLab_name'), '_OsDisk_1_9d889cf1a0de46449a80c76187948f69')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('disks_HypervLab_OsDisk_1_9d889cf1a0de46449a80c76187948f69_externalid')]"
+                        },
+                        "deleteOption": "Delete",
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": [],
+                    "diskControllerType": "SCSI"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_HypervLab_name')]",
+                    "adminUsername": "cmfadmin",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true,
+                        "patchSettings": {
+                            "patchMode": "AutomaticByOS",
+                            "assessmentMode": "ImageDefault",
+                            "enableHotpatching": false
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_hypervlab203_externalid')]",
+                            "properties": {
+                                "deleteOption": "Detach"
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        }
+    ]
+}

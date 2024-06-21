@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vaults_Project20955kv_name": {
-            "defaultValue": "Project20955kv",
+        "vaults_CMF_Migration_7503kv_name": {
+            "defaultValue": "CMF-Migration-7503kv",
             "type": "String"
         }
     },
@@ -12,21 +12,21 @@
         {
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2023-07-01",
-            "name": "[parameters('vaults_Project20955kv_name')]",
-            "location": "polandcentral",
+            "name": "[parameters('vaults_CMF_Migration_7503kv_name')]",
+            "location": "francecentral",
             "tags": {
-                "Migrate Project": "Project2"
+                "Migrate Project": "CMF-Migration-Lab"
             },
             "properties": {
                 "sku": {
                     "family": "A",
                     "name": "standard"
                 },
-                "tenantId": "6a74e396-c946-4654-ab7e-5f120bdac760",
+                "tenantId": "6a90c62c-5f34-42e8-9b92-9cf3594106fd",
                 "accessPolicies": [
                     {
-                        "tenantId": "6a74e396-c946-4654-ab7e-5f120bdac760",
-                        "objectId": "1477a0aa-6af3-48d9-8ec4-2716eca4f85b",
+                        "tenantId": "6a90c62c-5f34-42e8-9b92-9cf3594106fd",
+                        "objectId": "330e881b-46cb-40b4-a713-8c6056e23e4e",
                         "permissions": {
                             "keys": [
                                 "all"
@@ -46,7 +46,7 @@
                 "enabledForDeployment": true,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": true,
-                "vaultUri": "https://project20955kv.vault.azure.net/",
+                "vaultUri": "https://cmf-migration-7503kv.vault.azure.net/",
                 "provisioningState": "Succeeded",
                 "publicNetworkAccess": "Enabled"
             }
@@ -54,33 +54,66 @@
         {
             "type": "Microsoft.KeyVault/vaults/keys",
             "apiVersion": "2023-07-01",
-            "name": "[concat(parameters('vaults_Project20955kv_name'), '/HYPER0023agentauthcert')]",
-            "location": "polandcentral",
+            "name": "[concat(parameters('vaults_CMF_Migration_7503kv_name'), '/CMFDemoApl011bdaagentauthcertv2')]",
+            "location": "francecentral",
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_Project20955kv_name'))]"
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_CMF_Migration_7503kv_name'))]"
             ],
             "properties": {
                 "attributes": {
                     "enabled": true,
-                    "nbf": 1718645604,
-                    "exp": 1750182204
+                    "nbf": 1718806622,
+                    "exp": 1750343222
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/keys",
+            "apiVersion": "2023-07-01",
+            "name": "[concat(parameters('vaults_CMF_Migration_7503kv_name'), '/CMFDemoApl017296agentauthcert')]",
+            "location": "francecentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_CMF_Migration_7503kv_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true,
+                    "nbf": 1718806225,
+                    "exp": 1750342825
                 }
             }
         },
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2023-07-01",
-            "name": "[concat(parameters('vaults_Project20955kv_name'), '/HYPER0023agentauthcert')]",
-            "location": "polandcentral",
+            "name": "[concat(parameters('vaults_CMF_Migration_7503kv_name'), '/CMFDemoApl011bdaagentauthcertv2')]",
+            "location": "francecentral",
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_Project20955kv_name'))]"
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_CMF_Migration_7503kv_name'))]"
             ],
             "properties": {
                 "contentType": "application/x-pkcs12",
                 "attributes": {
                     "enabled": true,
-                    "nbf": 1718645604,
-                    "exp": 1750182204
+                    "nbf": 1718806622,
+                    "exp": 1750343222
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2023-07-01",
+            "name": "[concat(parameters('vaults_CMF_Migration_7503kv_name'), '/CMFDemoApl017296agentauthcert')]",
+            "location": "francecentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_CMF_Migration_7503kv_name'))]"
+            ],
+            "properties": {
+                "contentType": "application/x-pkcs12",
+                "attributes": {
+                    "enabled": true,
+                    "nbf": 1718806225,
+                    "exp": 1750342825
                 }
             }
         }
