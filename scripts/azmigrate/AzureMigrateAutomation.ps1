@@ -1,11 +1,12 @@
 #######################################################################################################################################
 #get-AzContext -ListAvailable | Remove-AzContext
 #connect-AzAccount
+
 #region variables
 
 $location = "francecentral"
-$resourcegroupname = "CMF-MigrationDemo08"
-$migrationprojectname = "CMF-MigrationDemo08"
+$resourcegroupname = "CMF-Customer-p5"
+$migrationprojectname = "CMF-Customer-p5"
 
 #CMF
 #$subscriptionid = "9d09cff7-2d88-4196-a17c-a0881d1b4f64" #cmf-azure-dev
@@ -38,7 +39,7 @@ $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armpa
 
 #$SetTenant = Set-AzContext -Tenant $tenantid
 #$SetSubscription = Set-AzContext -Subscription $subscriptionid
-
+#set-AzContext -Subscription $subscriptionid
 New-AzResourceGroup  -Name $resourcegroupname -Location $location
 
 #$Deploy_AzureMigrateMigration = 
