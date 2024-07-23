@@ -37,12 +37,19 @@
             "metadata": {
                 "description": "Specify the access policy object ID"
             }
+        },
+        "StorageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Storage account name in lower letters"
+            }
         }
     },
     "variables": {
         "keyvaultname": "[concat(parameters('AzMigrateProjectName'),'-kv')]",
         "keyvaulturi": "[concat('https://',variables('keyvaultname'),'.vault.azure.net')]",
-        "sqlsitename":"[concat(parameters('AzMigrateProjectApplianceName'),'-mastersite/',parameters('AzMigrateProjectName'),'-sqlsites')]" //az-weu-mig-061420mastersite/az-weu-mig-061420sqlsites
+        "sqlsitename":"[concat(parameters('AzMigrateProjectApplianceName'),'-mastersite/',parameters('AzMigrateProjectName'),'-sqlsites')]"
+      
     },
     "resources": [
         {
@@ -184,6 +191,46 @@
                 "tier": "Standard"
             },
             "properties": {}
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('StorageAccountName'),'storage')]",
+             "location": "[parameters('location')]",
+      "tags": {
+                "Migrate Project": "[parameters('AzMigrateProjectName')]"
+            },
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "allowCrossTenantReplication": false,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
         }
     ]
 }

@@ -19,6 +19,9 @@
         },
         "AccessPolicyObjectID": {
             "value": ""
+        },
+        "StorageAccountName": {
+            "value": ""
         }
     }
 }

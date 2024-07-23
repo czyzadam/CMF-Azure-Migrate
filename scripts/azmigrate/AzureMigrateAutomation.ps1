@@ -1,3 +1,4 @@
+
 #######################################################################################################################################
 #get-AzContext -ListAvailable | Remove-AzContext
 #connect-AzAccount
@@ -5,24 +6,33 @@
 #region variables
 
 $location = "francecentral"
-$resourcegroupname = "CMF-Customer-p5"
-$migrationprojectname = "CMF-Customer-p5"
+$resourcegroupname = "CMF-Customer1-p1"
+$migrationprojectname = "CMF-Customer1-p1"
 
 #CMF
 #$subscriptionid = "9d09cff7-2d88-4196-a17c-a0881d1b4f64" #cmf-azure-dev
-#$subscriptionid = "0cda6999-8d6c-4882-91a5-de0db2c74586" #cmf-azure-dev2
+$subscriptionid = "0cda6999-8d6c-4882-91a5-de0db2c74586" #cmf-azure-dev2
+$tenantid = "6a90c62c-5f34-42e8-9b92-9cf3594106fd"
 #$tenantid = "b7dd1ca6-8890-4eec-b441-890719cd4915"
 
 #ATM
-$subscriptionid = "4bfade5e-64eb-4d29-ba2e-933a6612bd5c"
-$tenantid = "6a74e396-c946-4654-ab7eget-5f120bdac760"
+#$subscriptionid = "4bfade5e-64eb-4d29-ba2e-933a6612bd5c"
+#$tenantid = "6a74e396-c946-4654-ab7eget-5f120bdac760"
 
 $AzureMigrateApplianceName = $migrationprojectname + "-app"
 $DeploymentName = "Deploy-" + $migrationprojectname
 
 # Object ID of the service principal you want to give access to Azure Keyvault
-#$Objectid = "330e881b-46cb-40b4-a713-8c6056e23e4e" # CMF
-$Objectid = "1477a0aa-6af3-48d9-8ec4-2716eca4f85b" # ATM
+$Objectid = "330e881b-46cb-40b4-a713-8c6056e23e4e" # CMF
+#$Objectid = "1477a0aa-6af3-48d9-8ec4-2716eca4f85b" # ATM
+
+function Remove-SpecialCharacters {
+    param(
+        [string]$inputString
+    )
+    $cleanString = $inputString -replace '[^\w\s]',''
+    return $cleanString
+}
 
 #######################################################################################################################################
 #Step 1 : ARM Deployment => Azure Migrate Project and Solutions
@@ -39,7 +49,7 @@ $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armpa
 
 #$SetTenant = Set-AzContext -Tenant $tenantid
 #$SetSubscription = Set-AzContext -Subscription $subscriptionid
-#set-AzContext -Subscription $subscriptionid
+set-AzContext -Subscription $subscriptionid
 New-AzResourceGroup  -Name $resourcegroupname -Location $location
 
 #$Deploy_AzureMigrateMigration = 
@@ -60,6 +70,7 @@ $armparamobject.parameters.AzMigrateProjectApplianceName.value = $AzureMigrateAp
 $armparamobject.parameters.location.value = $location
 $armparamobject.parameters.TenantID.value = $tenantid
 $armparamobject.parameters.AccessPolicyObjectID.value = $Objectid
+$armparamobject.parameters.StorageAccountName.value = (Remove-SpecialCharacters -inputString $migrationprojectname).ToLower()
 
 $parameterobject = @{ }
 $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armparamobject.parameters[$_]['value'] }
