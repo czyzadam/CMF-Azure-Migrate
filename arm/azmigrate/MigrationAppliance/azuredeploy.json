@@ -48,7 +48,7 @@
     "variables": {
         "keyvaultname": "[concat(parameters('AzMigrateProjectName'),'-kv')]",
         "keyvaulturi": "[concat('https://',variables('keyvaultname'),'.vault.azure.net')]",
-        "sqlsitename":"[concat(parameters('AzMigrateProjectApplianceName'),'-mastersite/',parameters('AzMigrateProjectName'),'-sqlsites')]"
+        "sqlsitename":"[concat(parameters('AzMigrateProjectName'),'-mastersite/',parameters('AzMigrateProjectName'),'-sqlsites')]"
       
     },
     "resources": [
@@ -134,7 +134,7 @@
         {
             "type": "Microsoft.OffAzure/masterSites",
             "apiVersion": "2020-07-07",
-            "name": "[concat(parameters('AzMigrateProjectApplianceName'),'-mastersite')]",
+            "name": "[concat(parameters('AzMigrateProjectName'),'-mastersite')]",
              "location": "[parameters('location')]",
             "dependsOn": [
                     "[resourceId('Microsoft.OffAzure/hypervSites', concat(parameters('AzMigrateProjectApplianceName'),'-site'))]"
@@ -158,7 +158,7 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 //"/subscriptions/f0dcfd42-4c20-490a-bb3b-c6a2391c99f3/resourceGroups/hub-weu-mig-rg/providers/Microsoft.OffAzure/MasterSites/az-weu-mig-061420mastersite"
-                 "[concat('Microsoft.OffAzure/MasterSites/', parameters('AzMigrateProjectApplianceName'),'-mastersite')]"
+                 "[concat('Microsoft.OffAzure/MasterSites/', parameters('AzMigrateProjectName'),'-mastersite')]"
             ],
             "tags": {
                 "Migrate Project": "[parameters('AzMigrateProjectName')]"
@@ -180,7 +180,7 @@
         {
             "type": "Microsoft.RecoveryServices/vaults",
             "apiVersion": "2018-07-10",
-            "name": "[concat(parameters('AzMigrateProjectApplianceName'),'-rsv')]",
+            "name": "[concat(parameters('AzMigrateProjectName'),'-rsv')]",
             "location": "[parameters('location')]",
             "dependsOn": [],
             "tags": {

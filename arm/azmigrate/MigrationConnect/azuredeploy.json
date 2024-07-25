@@ -80,7 +80,7 @@
                         }
                     }
                 },
-                {
+                               {
                     "type": "Microsoft.Migrate/MigrateProjects/Solutions",
                     "apiVersion": "2018-09-01-preview",
                     "name": "[variables('ServerDiscoverySolutionName')]",

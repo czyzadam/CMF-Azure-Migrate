@@ -6,13 +6,13 @@
 #region variables
 
 $location = "francecentral"
-$resourcegroupname = "Customer2-01"
-$migrationprojectname = "Customer2-01"
+$resourcegroupname = "CMF-Customera-03"
+$migrationprojectname = "CMF-Customera-03"
 
 #CMF
 #$subscriptionid = "9d09cff7-2d88-4196-a17c-a0881d1b4f64" #cmf-azure-dev
-$subscriptionid = "0cda6999-8d6c-4882-91a5-de0db2c74586" #cmf-azure-dev2
-$tenantid = "6a90c62c-5f34-42e8-9b92-9cf3594106fd"
+#$subscriptionid = "0cda6999-8d6c-4882-91a5-de0db2c74586" #cmf-azure-dev2
+#$tenantid = "6a90c62c-5f34-42e8-9b92-9cf3594106fd"
 #$tenantid = "b7dd1ca6-8890-4eec-b441-890719cd4915"
 
 #ATM

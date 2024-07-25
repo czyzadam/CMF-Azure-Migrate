@@ -1,0 +1,23 @@
+{
+        "properties": {
+          "vmUptime": {
+            "daysPerMonth": 31,
+            "hoursPerDay": 24
+          },
+          "discountPercentage": 0,
+          "azureOfferCode": "MSAZR0003P",
+          "azureLocation": "francecentral",
+          "azurePricingTier": "Standard",
+          "azureStorageRedundancy": "LocallyRedundant",
+          "scalingFactor": 1,
+          "stage": "InProgress",
+          "currency": "EUR",
+          "azureDiskType": "StandardOrPremium",
+          "timeRange": "Day",
+          "percentile": "Percentile95",
+          "sizingCriterion": "",
+          "reservedInstance": "",
+          "azureHybridUseBenefit": "",
+          "azureVmFamilies": [""]
+        }
+      }

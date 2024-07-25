@@ -1,0 +1,9 @@
+{
+  "properties":[
+        {
+          "name" : "Perf 3 Year RI AHUB",
+          "sizingCriterion": "PerformanceBased",
+          "reservedInstance": "RI3Year",
+          "azureHybridUseBenefit": "Yes"
+        }]
+}
