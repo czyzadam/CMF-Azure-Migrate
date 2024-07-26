@@ -3,6 +3,8 @@ Param(
     $CsvFilePath
 )
 
+$subscriptionId = '0cda6999-8d6c-4882-91a5-de0db2c74586'
+
 $ErrorActionPreference = "Stop"
 
 $scriptsPath = $PSScriptRoot

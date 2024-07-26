@@ -1,6 +1,0 @@
-"VM display name","Current status","ARM ID"
-"Windows01","Enabled","/subscriptions/0cda6999-8d6c-4882-91a5-de0db2c74586/resourceGroups/CMF-Customer-01/providers/Microsoft.OffAzure/HyperVSites/CMFCustomer-012472site/machines/54ec0074-b241-4dd8-9624-7c0769234637"
-"RedHat02","Disabled","/subscriptions/0cda6999-8d6c-4882-91a5-de0db2c74586/resourceGroups/CMF-Customer-01/providers/Microsoft.OffAzure/HyperVSites/CMFCustomer-012472site/machines/ef7b203d-f5bd-4a5d-9fcd-d235b28915ed"
-"RedHat01","Disabled","/subscriptions/0cda6999-8d6c-4882-91a5-de0db2c74586/resourceGroups/CMF-Customer-01/providers/Microsoft.OffAzure/HyperVSites/CMFCustomer-012472site/machines/c67fd224-714d-4210-b282-5bb2e1f8a62a"
-"AzureMigrateAppliance_v25.24.02.07","Disabled","/subscriptions/0cda6999-8d6c-4882-91a5-de0db2c74586/resourceGroups/CMF-Customer-01/providers/Microsoft.OffAzure/HyperVSites/CMFCustomer-012472site/machines/ea209632-cc86-4deb-9090-90813eb43c32"
-"Windows02","Enabled","/subscriptions/0cda6999-8d6c-4882-91a5-de0db2c74586/resourceGroups/CMF-Customer-01/providers/Microsoft.OffAzure/HyperVSites/CMFCustomer-012472site/machines/3934c14d-512c-47ed-b675-c3f25eddb40b"

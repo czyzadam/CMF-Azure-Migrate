@@ -1,0 +1,17 @@
+20240725_172048[LOG]-[START]-Processing CsvFile '.\Customer-01.csv'
+20240725_172048[LOG]-Loading Csv file 'C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\scripts\azmigrate\automation-script\Customer-01.csv'
+20240725_172048[LOG]-Directory already exist: 'C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\scripts\azmigrate\automation-script\logs'
+20240725_172048[LOG]-Csv output report file: 'C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\scripts\azmigrate\automation-script\logs\out.AzMigrate_StartReplication.ps1.Customer-01.csv.20240725_172048.csv'
+20240725_172048[LOG]-Checking if current subscription equals to ''
+20240725_172049[LOG]-Setting context subscription ''
+20240725_172049[ERROR]-Exception processing item
+20240725_172049[ERROR]-Set-AzContext: C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\scripts\azmigrate\automation-script\AzMigrate_CSV_Processor.ps1:112:41
+Line |
+ 112 |              Set-AzContext -Subscription $subscriptionId
+     |                                          ~~~~~~~~~~~~~~~
+     | Cannot validate argument on parameter 'Subscription'. The argument is null or empty. Provide an argument that is not null or empty, and then try the command
+     | again.
+
+
+20240725_172049[LOG]-Creating Csv reporting output 'C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\scripts\azmigrate\automation-script\logs\out.AzMigrate_StartReplication.ps1.Customer-01.csv.20240725_172048.csv'
+20240725_172049[LOG]-[FINISH]-CsvFile: '.\Customer-01.csv'

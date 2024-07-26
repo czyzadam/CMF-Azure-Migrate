@@ -1,14 +1,14 @@
 $vaultName = "CMF-Customer-01-MigrateVault-1994913701"  
 $vaultRG = "CMF-Customer-01"
-$sas_token="https://cmfmigratereporting.blob.core.windows.net/reports?sp=racwdl&st=2024-07-25T13:47:30Z&se=2024-07-25T21:47:30Z&spr=https&sv=2022-11-02&sr=c&sig=akvSnPacq8X3tqksrd99b4UlCKdy%2BI1ajPMGZH8bIik%3D”
+$sas_token="https://cmfmigratereporting.blob.core.windows.net/reports?sp=racwdl&st=2024-07-26T06:17:29Z&se=2024-07-30T14:17:29Z&spr=https&sv=2022-11-02&sr=c&sig=qwrI1tP%2B8phnOFYalLCAROsJdZ7JU5DDnCpLyku4l%2F8%3D”
 $account_name = "cmfmigratereporting"
 $context = New-AzStorageContext -StorageAccountName $account_name 
 $containerName = "reports"
 $report = "MigrationReport.html"
-$file =  'C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\MigrationReport.html'
-$file2 =  'C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\MigrationReport.csv'
+$file =  'C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\reports\MigrationReport.html'
+$file2 =  'C:\4.Projects\GitHub\CMF_AzureMigrate_ARM\reports\MigrationReport.csv'
 
-
+Select-AzSubscription  -SubscriptionId '0cda6999-8d6c-4882-91a5-de0db2c74586'
 $vault = Get-AzRecoveryServicesVault -Name $vaultName -ResourceGroupName $vaultRG
 Set-AzRecoveryServicesAsrVaultContext -Vault $vault
 $jobs = Get-AzRecoveryServicesAsrJob | Select TargetObjectName, DisplayName, State, StateDescription, StartTime, EndTime, TargetObjectType | Where-Object { $_.TargetObjectType -like "ProtectionEntity" }
@@ -57,7 +57,7 @@ $htmlContent = @"
 "@
 
 # Save the HTML content to a file
-$htmlContent | Set-Content -Path "MigrationReport.html" -Encoding UTF8
+$htmlContent | Set-Content -Path $file  -Encoding UTF8
 
 azcopy copy $file $sas_token --recursive
 azcopy copy $file2 $sas_token --recursive

@@ -4,10 +4,16 @@
 #connect-AzAccount
 
 #region variables
+param (
+    [string]$location,
+    [string]$resourcegroupname,
+    [string]$migrationprojectname
+)
 
-$location = "francecentral"
-$resourcegroupname = "Customer2-01"
-$migrationprojectname = "Customer2-01"
+
+#$location = "francecentral"
+#$resourcegroupname = "Customera5-01"
+#$migrationprojectname = "Customera5-01"
 
 #CMF
 #$subscriptionid = "9d09cff7-2d88-4196-a17c-a0881d1b4f64" #cmf-azure-dev
@@ -16,8 +22,8 @@ $tenantid = "6a90c62c-5f34-42e8-9b92-9cf3594106fd"
 #$tenantid = "b7dd1ca6-8890-4eec-b441-890719cd4915"
 
 #ATM
-$subscriptionid = "4bfade5e-64eb-4d29-ba2e-933a6612bd5c"
-$tenantid = "6a74e396-c946-4654-ab7eget-5f120bdac760"
+#$subscriptionid = "4bfade5e-64eb-4d29-ba2e-933a6612bd5c"
+#$tenantid = "6a74e396-c946-4654-ab7eget-5f120bdac760"
 
 $AzureMigrateApplianceName = $migrationprojectname + "-app"
 $DeploymentName = "Deploy-" + $migrationprojectname
@@ -49,7 +55,7 @@ $armparamobject.parameters.keys | ForEach-Object { $parameterobject[$_] = $armpa
 
 #$SetTenant = Set-AzContext -Tenant $tenantid
 #$SetSubscription = Set-AzContext -Subscription $subscriptionid
-set-AzContext -Subscription $subscriptionid
+#set-AzContext -Subscription $subscriptionid
 New-AzResourceGroup  -Name $resourcegroupname -Location $location
 
 #$Deploy_AzureMigrateMigration = 
